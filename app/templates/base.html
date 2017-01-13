@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+<head>
+  <title>Bookmarkr</title>
+
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link href="https://fonts.googleapis.com/css?family=Oleo+Script|Montserrat" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+<!--     <script src="/static/js/moment.js"></script>
+ -->    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  <style>
+    body {
+      background-color: lightgrey;
+    }
+    .padtop {
+      margin-top: 5px;
+    }
+    .alignright {
+      float: right;
+      top: 0px;
+    }
+    .blacktext {
+      color: black;
+    }
+    .navbar-brand {
+      font-family: 'Oleo Script', cursive;
+      color: white;
+      font-size: 24px;
+      line-height: 30px;
+      vertical-align: middle;
+      float: left;
+      height: 60px;
+      padding: 15px 15px;
+    }
+    .navbartext {
+      padding: 5px 25px 5px 25px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+    }
+    .navbar {
+      border-radius: 0;
+    }
+    body { 
+      padding-top: 70px; 
+      padding-bottom: 100px;
+    }
+    .padtopbot {
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    .reducewidth80 {
+      max-width: 400px; 
+    }
+    .flexicontainer {
+      position: relative;
+    }
+    .textimgcenter {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      text-align: center;
+      transform: translate(-50%, -50%);
+      font-size: 22px;
+      font-family: 'Oleo Script', cursive;
+    }
+  </style>
+
+</head>
+
+<body class="">
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header navbartext">
+          <a class="navbar-brand" href="{{ url_for('index') }}"><span class="glyphicon glyphicon-th" aria-hidden="true"></span> Bookmarkr</a>
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+
+        {% if g.user.is_authenticated %}
+
+          <div class="nav navbar-nav navbartext">
+            <ul class="nav navbar-nav navbartext">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Filter<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  {% for key, value in tags.iteritems() %}
+                    <li><a href="{{ url_for('filter', tagname=key) }}">{{ key|e }}</a></li>
+                  {% endfor %}
+                  <li role="separator" class="divider"></li>
+                    <li><a href="{{ url_for('tag.index_view') }}">Edit tags</a></li>
+                    {% if filtered %}
+                      <li><a href="{{ url_for('index') }}">Remove Filter</a></li>   
+                    {% endif %}
+                  </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="collapse navbar-collapse navbar-header navbartext navbar-right" id="admin-navbar-collapse">
+            <ul class="nav navbar-nav navbar-right navbartext">
+              <li><a href="/admin/" target="_blank">// Manage  </a></li>
+              <li><a href="/logout">// Logout</a></li>
+            </ul>
+          </div>
+        </div>
+
+      {% else %}
+
+        <div class="collapse navbar-collapse navbar-header navbartext navbar-right" id="admin-navbar-collapse">
+          {% if security.registerable or security.recoverable or security.confirmable %}
+            <ul class="nav navbar-nav navbar-right navbartext">
+                <li><a href="{{ url_for_security('login') }}{% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}">// Login</a></li>
+                {% if security.registerable %}
+                <li><a href="{{ url_for_security('register') }}{% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}">// Register</a></li>
+                {% endif %}
+                {% if security.recoverable %}
+                <li><a href="{{ url_for_security('forgot_password') }}">// Forgot password</a></li>
+                {% endif %}
+                {% if security.confirmable %}
+                <li><a href="{{ url_for_security('send_confirmation') }}">// Confirm account</a></li>
+                {% endif %}
+            </ul>
+          {% endif %}
+        </div>
+
+      {% endif %}
+
+    </nav>
+
+            {% block content %}{% endblock %}
+
+  <script>
+
+    $('.dropdown-toggle').dropdown()
+
+  </script>
+
+</body>
+</html>
+
