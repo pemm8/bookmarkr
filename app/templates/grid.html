@@ -36,6 +36,7 @@
 									<!-- <li><a onclick="editTags({{ bookmark.id }})">Edit tags</a></li> -->
 									<li><a href="{{ url_for('bookmark.edit_view', id=bookmark.id, url=url_for('index')) }}">Edit tags</a></li>
 									<li><a href="{{ url_for('remove', id=bookmark.id) }}">Remove</a></li>
+									<li><a href="{{ url_for('refresh', id=bookmark.id) }}">Refresh Image</a></li>
 								</ul>
 							</div>
 					</span>

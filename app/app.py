@@ -285,6 +285,15 @@ def add():
 			return redirect(url)
 	abort(404)
 
+@app.route('/refresh/<int:id>')
+def refresh(id):
+	# user, bookmark
+	b = Bookmark.query.filter_by(id=id).first()
+	if b.marker == g.user:
+		b.fetch_image()
+		db.session.commit()
+		return redirect(url_for('index'))
+
 @app.route('/rm/<int:id>')
 def remove(id):
 	b = Bookmark.query.filter_by(id=id).first()
