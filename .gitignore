@@ -107,4 +107,6 @@ ENV/
 *.pyc
 
 # data
+data/
 *.db
+config/
