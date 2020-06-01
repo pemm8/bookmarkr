@@ -105,3 +105,6 @@ ENV/
 
 # pyc files
 *.pyc
+
+# data
+*.db

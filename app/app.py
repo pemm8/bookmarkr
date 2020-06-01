@@ -43,6 +43,7 @@ SECRET_KEY = '987654321'
 SECURITY_TRACKABLE = True
 SECURITY_REGISTERABLE = True
 SECURITY_CONFIRMABLE = True
+SECURITY_PASSWORD_SALT = '5P499QDJVAW7S2MXFR4L3OYYLH7LY4DK'
 
 # celery config
 CELERY_BROKER_URL = 'amqp://localhost'
@@ -58,8 +59,8 @@ MAIL_PASSWORD = 'gy9-A64-SKZ-BSt'
 ADMINS = ['paul.mclear@aol.co.uk']
 
 # db config
-# SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % os.path.join(APP_ROOT, 'bookmarks.db')
-SQLALCHEMY_DATABASE_URI = 'postgresql://paulmclear:password@localhost/bookmarker'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % os.path.join(APP_ROOT, 'bookmarks.db')
+# SQLALCHEMY_DATABASE_URI = 'postgresql://paulmclear:password@localhost/bookmarker'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # create our flask app and wrappers
@@ -98,16 +99,6 @@ class Bookmark(db.Model):
 	class Meta:
 		ordering = (('created_date', 'desc'),)
 
-	# def fetch_image(self):
-	# 	url_hash = hashlib.md5(self.url).hexdigest()
-	# 	filename = 'bookmark-%s.png' % url_hash
-
-	# 	outfile = os.path.join(MEDIA_ROOT, filename)
-	# 	params = [PHANTOM, SCRIPT, self.url, outfile]
-
-	# 	exitcode = subprocess.call(params)
-	# 	if exitcode == 0:
-	# 		self.image = os.path.join(MEDIA_URL, filename)
 
 	def fetch_image(self):
 		url_hash = hashlib.md5(self.url).hexdigest()
@@ -117,6 +108,7 @@ class Bookmark(db.Model):
 		fetchimage_async.delay(self.url, outfile)
 
 		self.image = os.path.join(MEDIA_URL, filename)
+
 
 class Tag(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
